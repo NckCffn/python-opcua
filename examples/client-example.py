@@ -92,7 +92,7 @@ if __name__ == "__main__":
         # sub.delete()
 
         # calling a method on server
-        res = obj.call_method("{}:multiply".format(idx), 3, "klk")
+        res = obj.call_method("{}:multiply".format(idx), 3, "123")
         print("method result is: ", res)
 
         embed()
