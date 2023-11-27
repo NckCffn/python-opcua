@@ -8,6 +8,7 @@ from math import sin
 import sys
 
 from opcua.ua import NodeId, NodeIdType
+from opcua.server.user_manager import UserManager  # Assuming UserManager is a part of the opcua library
 
 sys.path.insert(0, "..")
 
@@ -70,6 +71,19 @@ class VarUpdater(Thread):
             self.var.set_value(v)
             time.sleep(0.1)
 
+# Define user credentials dictionary
+users = {
+    "user1": "password1",
+    "user2": "password2",
+    # Add more users as needed
+}
+
+# Define the custom user manager function
+def custom_user_manager(isession, username, password):
+    if username in users and users[username] == password:
+        return True
+    return False
+
 
 if __name__ == "__main__":
     # optional: setup logging
@@ -85,16 +99,28 @@ if __name__ == "__main__":
 
     # now setup our server
     server = Server()
+
+    # Set up user manager with custom authentication
+    user_manager = UserManager(server)
+    user_manager.set_user_manager(custom_user_manager)
+
+    server.user_manager = user_manager
+
+    # Load server certificate and private key
+    #server.load_certificate("server_cert.pem")
+    #server.load_private_key("server_private_key.pem")
+
     #server.disable_clock()
     #server.set_endpoint("opc.tcp://localhost:4840/freeopcua/server/")
-    server.set_endpoint("opc.tcp://0.0.0.0:4840/freeopcua/server/")
+    server.set_endpoint("opc.tcp://0.0.0.0:4841/freeopcua/server/")
     server.set_server_name("FreeOpcUa Example Server")
+   
     # set all possible endpoint policies for clients to connect through
     server.set_security_policy([
-                ua.SecurityPolicyType.NoSecurity,
-                ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt,
-                ua.SecurityPolicyType.Basic256Sha256_Sign])
-
+                ua.SecurityPolicyType.NoSecurity])
+                #ua.SecurityPolicyType.Basic256Sha256_SignAndEncrypt,
+                #ua.SecurityPolicyType.Basic256Sha256_Sign])
+                
     # setup our own namespace
     uri = "http://examples.freeopcua.github.io"
     idx = server.register_namespace(uri)

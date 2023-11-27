@@ -79,7 +79,7 @@ class HelloServer:
 if __name__ == '__main__':
     script_dir = os.path.dirname(__file__)
     with HelloServer(
-            "opc.tcp://0.0.0.0:40840/freeopcua/server/",
+            "opc.tcp://0.0.0.0:40841/freeopcua/server/",
             "FreeOpcUa Example Server",
             os.path.join(script_dir, "test_saying.xml")) as server:
         embed()

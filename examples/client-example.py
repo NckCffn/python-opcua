@@ -40,8 +40,9 @@ if __name__ == "__main__":
     #logger = logging.getLogger("KeepAlive")
     #logger.setLevel(logging.DEBUG)
 
-    client = Client("opc.tcp://localhost:4840/freeopcua/server/")
-    # client = Client("opc.tcp://admin@localhost:4840/freeopcua/server/") #connect using a user
+    client = Client("opc.tcp://localhost:4841/freeopcua/server/")
+    client.set_user("user1")  # Replace with the actual username
+    client.set_password("password1")  # Replace with the actual password
     try:
         client.connect()
         client.load_type_definitions()  # load definition of server specific structures/extension objects
@@ -79,6 +80,11 @@ if __name__ == "__main__":
         sub = client.create_subscription(500, handler)
         handle = sub.subscribe_data_change(myvar)
         time.sleep(0.1)
+
+        print("Current value of myvar: ", myvar.get_value())
+        new_value = 42  # Or any other appropriate value for the variable's data type
+        myvar.set_value(new_value)
+        print("New value of myvar set to: ", myvar.get_value())
 
         # we can also subscribe to events from server
         sub.subscribe_events()
