@@ -34,8 +34,8 @@ class SubHandler(object):
     def datachange_notification(self, node, val, data):
         print("Python: New data change event", node, val)
 
-    def event_notification(self, event):
-        print("Python: New event", event)
+    #def event_notification(self, event):
+        #print("Python: New event", event)
 
 
 # method to be exposed through server
@@ -87,8 +87,8 @@ def custom_user_manager(isession, username, password):
 
 if __name__ == "__main__":
     # optional: setup logging
-    logging.basicConfig(level=logging.WARN)
-    #logger = logging.getLogger("opcua.address_space")
+    #logging.basicConfig(level=logging.WARN)
+    logger = logging.getLogger("opcua.address_space")
     # logger.setLevel(logging.DEBUG)
     #logger = logging.getLogger("opcua.internal_server")
     # logger.setLevel(logging.DEBUG)
@@ -173,9 +173,9 @@ if __name__ == "__main__":
     vup.start()
     try:
         # enable following if you want to subscribe to nodes on server side
-        #handler = SubHandler()
-        #sub = server.create_subscription(500, handler)
-        #handle = sub.subscribe_data_change(myvar)
+        handler = SubHandler()
+        sub = server.create_subscription(500, handler)
+        handle = sub.subscribe_data_change(myvar)
         # trigger event, all subscribed clients wil receive it
         var = myarrayvar.get_value()  # return a ref to value in db server side! not a copy!
         var = copy.copy(var)  # WARNING: we need to copy before writting again otherwise no data change event will be generated

@@ -11,7 +11,7 @@ from opcua import ua
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARN)
-    client = Client("opc.tcp://opcua.demo-this.com:51210/UA/SampleServer")
+    client = Client("opc.tcp://localhost:4841/freeopcua/server/")
     try:
         client.connect()
         root = client.get_root_node()
